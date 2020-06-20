@@ -1,0 +1,69 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.qubit'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//runtimeOnly 'org.postgresql:postgresql'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	// https://mvnrepository.com/artifact/org.postgresql/postgresql
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+	
+	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+	
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
+	compile group: 'org.projectlombok', name: 'lombok', version: '1.16.22'
+	// https://mvnrepository.com/artifact/com.facebook.api/facebook-java-api
+	//compile group: 'com.facebook.api', name: 'facebook-java-api', version: '2.0.0'
+	
+	// https://mvnrepository.com/artifact/com.facebook.api/facebook-util
+	//compile group: 'com.facebook.api', name: 'facebook-util', version: '1.8.1'
+	
+	// https://mvnrepository.com/artifact/org.springframework.social/spring-social-facebook
+	//compile group: 'org.springframework.social', name: 'spring-social-facebook', version: '2.0.3.RELEASE'
+	
+	// https://mvnrepository.com/artifact/org.springframework.social/spring-social-core
+	//compile group: 'org.springframework.social', name: 'spring-social-core', version: '1.1.6.RELEASE'
+	
+	// https://mvnrepository.com/artifact/org.springframework.social/spring-social-config
+	//compile group: 'org.springframework.social', name: 'spring-social-config', version: '1.1.6.RELEASE'
+	
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.3.1.RELEASE'
+	
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	//testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+	
+	// https://mvnrepository.com/artifact/com.restfb/restfb
+	compile group: 'com.restfb', name: 'restfb', version: '3.7.0'
+	
+	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.4'
+	
+	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.4'
+	
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
+}
+
+test {
+	useJUnitPlatform()
+}
