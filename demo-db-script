@@ -1,0 +1,65 @@
+CREATE DATABASE qubit_ai
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_India.1252'
+    LC_CTYPE = 'English_India.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+	
+CREATE SCHEMA public
+    AUTHORIZATION postgres;
+
+COMMENT ON SCHEMA public
+    IS 'standard public schema';
+
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+GRANT ALL ON SCHEMA public TO postgres;
+
+
+-- Name: fblike; Type: TABLE; Schema: public; Owner: qubit_ai
+--
+
+CREATE TABLE public.fblike (
+    id character varying(255) NOT NULL,
+    created_date timestamp without time zone,
+    fb_user_id character varying(255),
+    like_created_time timestamp without time zone,
+    page_id character varying(255),
+    page_name character varying(255)
+);
+
+
+ALTER TABLE public.fblike OWNER TO qubit_ai;
+
+--
+-- Name: post; Type: TABLE; Schema: public; Owner: qubit_ai
+--
+
+CREATE TABLE public.post (
+    id character varying(255) NOT NULL,
+    created_date timestamp without time zone,
+    fb_user_id character varying(255),
+    message character varying(255),
+    post_created_time timestamp without time zone,
+    post_id character varying(255)
+);
+
+
+ALTER TABLE public.post OWNER TO qubit_ai;
+
+--
+-- Name: fblike fblike_pkey; Type: CONSTRAINT; Schema: public; Owner: qubit_ai
+--
+
+ALTER TABLE ONLY public.fblike
+    ADD CONSTRAINT fblike_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: public; Owner: qubit_ai
+--
+
+ALTER TABLE ONLY public.post
+    ADD CONSTRAINT post_pkey PRIMARY KEY (id);
