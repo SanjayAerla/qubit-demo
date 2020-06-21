@@ -16,10 +16,10 @@ public class DAOLayer {
 	@Autowired
 	private JdbcTemplate jdbcTemplate; 
 	
-	public String getlatestPostId() throws SQLException{  
+	public String getlatestPostId(String userId) throws SQLException{  
 		
 		List<Map<String, Object>> mcresult = new ArrayList<>();
-	    String mcQuery="select post_id from post order by post_created_time desc limit 1";  
+	    String mcQuery="select post_id from post where fb_user_id = '"+userId+"' order by post_created_time desc limit 1";  
 	    mcresult= jdbcTemplate.queryForList(mcQuery);
 	    if( null == mcresult || mcresult.isEmpty() || mcresult.get(0).get("post_id") == null)
 	    	return "";
@@ -27,10 +27,10 @@ public class DAOLayer {
 //	    return null;
 	}
 	
-	public String getlatestFbLikePageId() throws SQLException{  
+	public String getlatestFbLikePageId(String userId) throws SQLException{  
 		
 		List<Map<String, Object>> mcresult = new ArrayList<>();
-	    String mcQuery="select page_id from fblike order by like_created_time desc limit 1";  
+	    String mcQuery="select page_id from fblike where fb_user_id = '"+userId+"' order by like_created_time desc limit 1";  
 	    mcresult= jdbcTemplate.queryForList(mcQuery);
 	    if( null == mcresult || mcresult.isEmpty() || mcresult.get(0).get("page_id") == null)
 	    	return "";

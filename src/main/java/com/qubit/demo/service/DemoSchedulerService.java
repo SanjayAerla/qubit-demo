@@ -1,20 +1,16 @@
 package com.qubit.demo.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.transaction.Transactional;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +28,6 @@ public class DemoSchedulerService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DemoSchedulerService.class);
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Statics.DEFAULT_ZONED_FORMATT_WITH_GMT);
-
-//	@Autowired
-//	UserRepository userRepository;
 	
 	@Autowired
 	PostRepository postRepository;
@@ -47,6 +40,13 @@ public class DemoSchedulerService {
 	
 	@Autowired
 	DAOLayer dao;
+	
+	public static Boolean testModeEnable;
+	
+	@Value("${test.mode.enable}")
+	public void setAccessToken(String accessToken) {
+		testModeEnable = Boolean.valueOf(accessToken);
+	}
 	
 	boolean postsCompleted = false;
 	
@@ -65,6 +65,11 @@ public class DemoSchedulerService {
 	@Async
 	public void savePosts() throws Exception {
 		
+		if(testModeEnable){
+			logger.info("savePosts Method CALLED");
+			return;
+		}
+		
 		int postsCount = 0;
 		postList = new ArrayList<>();
 		postsCompleted = false;
@@ -75,7 +80,7 @@ public class DemoSchedulerService {
 		JSONObject data = DemoUtils.getData(Statics.POSTS);
 		if(data != null && data.isEmpty())
 			return;
-		latestPost = dao.getlatestPostId();
+		latestPost = dao.getlatestPostId(DemoUtils.MY_USER_ID);
 		
 		while(!postsCompleted) {
 			boolean isCompleted = savePostsInBatch(data, latestPost, count, nextPageURL);
@@ -112,7 +117,7 @@ public class DemoSchedulerService {
 						for (Map<String, Object> postMapObj : postData) {
 
 							Post postObj = new Post();
-							postObj.setFbUserId(Statics.fbUserId);
+							postObj.setFbUserId(DemoUtils.MY_USER_ID);
 							postObj.setPostId(postMapObj.get("id").toString());
 							postObj.setPostCreatedTime(LocalDateTime.parse(postMapObj.get("created_time").toString(),formatter));
 							if(postMapObj.containsKey("message"))
@@ -146,7 +151,7 @@ public class DemoSchedulerService {
 						for (Map<String, Object> postMapObj : postData) {
 
 							Post postObj = new Post();
-							postObj.setFbUserId(Statics.fbUserId);
+							postObj.setFbUserId(DemoUtils.MY_USER_ID);
 							postObj.setPostId(postMapObj.get("id").toString());
 							postObj.setPostCreatedTime(LocalDateTime.parse(postMapObj.get("created_time").toString(),formatter));
 							if(postMapObj.containsKey("message"))
@@ -181,6 +186,10 @@ public class DemoSchedulerService {
 	@Async
 	public void saveFBLikes() throws Exception {
 		
+		if(testModeEnable){
+			logger.info("saveFBLikes Method CALLED");
+			return;
+		}
 		int fbLikesCount = 0;
 		fbLikeList = new ArrayList<>();
 		postsCompleted = false;
@@ -188,10 +197,10 @@ public class DemoSchedulerService {
 		int count = 0;
 		String latestPageLikeId = null;
 		
-		JSONObject data = DemoUtils.getData(Statics.POSTS);
+		JSONObject data = DemoUtils.getData(Statics.LIKES);
 		if(data != null && data.isEmpty())
 			return;
-		latestPageLikeId = dao.getlatestFbLikePageId();
+		latestPageLikeId = dao.getlatestFbLikePageId(DemoUtils.MY_USER_ID);
 		
 		while(!likesCompleted) {
 			boolean isCompleted = saveFBLikesInBatch(data, latestPageLikeId, count, nextPageURL);
@@ -228,7 +237,7 @@ public class DemoSchedulerService {
 						for (Map<String, Object> fbLikeMapObj : fbLikeData) {
 
 							FBLike fbLikeObj = new FBLike();
-							fbLikeObj.setFbUserId(Statics.fbUserId);
+							fbLikeObj.setFbUserId(DemoUtils.MY_USER_ID);
 							fbLikeObj.setPageId(fbLikeMapObj.get("id").toString());
 							fbLikeObj.setLikeCreatedTime(LocalDateTime.parse(fbLikeMapObj.get("created_time").toString(),formatter));
 							if(fbLikeMapObj.containsKey("name"))
@@ -260,7 +269,7 @@ public class DemoSchedulerService {
 					for (Map<String, Object> fbLikeMapObj : fbLikeData) {
 
 						FBLike fbLikeObj = new FBLike();
-						fbLikeObj.setFbUserId(Statics.fbUserId);
+						fbLikeObj.setFbUserId(DemoUtils.MY_USER_ID);
 						fbLikeObj.setPageId(fbLikeMapObj.get("id").toString());
 						fbLikeObj.setLikeCreatedTime(LocalDateTime.parse(fbLikeMapObj.get("created_time").toString(),formatter));
 						if(fbLikeMapObj.containsKey("name"))

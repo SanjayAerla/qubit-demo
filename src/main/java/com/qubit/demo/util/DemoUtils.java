@@ -4,27 +4,40 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-//@Service
+@Service
 //@Component
 public class DemoUtils {
 
-//	@Value("${access.token}")
-	private static String MY_ACCESS_TOKEN = "EAAWIwF25NmUBAP7W1t5UP9mFQtl2H01BemDZB8wLo80mfoNGtPJ6nhtd0bWrWJ0Cp7TGN7i20FFajLlcqJtZBgzREWlVkIw5Sr8fnES1UfeZAA2caASqKJWeR5ZBIZBeBpEwGRQ8z6Hz7zmKFq8qIZCmGCOD9NZCj0UpZAhV7N2QudPdNJHDBlLYhvgxFWaH8e7jmCE9lAlfAQZDZD";
+	private static final Logger logger = LoggerFactory.getLogger(DemoUtils.class);
 	
-//	@Autowired
-//    private static Environment env;
+	public static String MY_ACCESS_TOKEN;
 	
+	public static String MY_USER_ID;
+	
+	@Value("${access.token}")
+	public void setAccessToken(String accessToken) {
+		DemoUtils.MY_ACCESS_TOKEN = accessToken;
+	}
+	
+	@Value("${fb.user.id}")
+	public void setMyUserId(String myUserId) {
+		DemoUtils.MY_USER_ID = myUserId;
+	}
+		
 	public static final String BASE_URL = "https://graph.facebook.com/v7.0/me?";
 	public static final String FIELDS = "fields=";
 	public static final String FQL_ME_TAGGED_PLACES = "/me/tagged_places";
 	public static final String ACCESS_TOKEN = "access_token=";
-//	private static String MY_ACCESS_TOKEN = env.getProperty("access.token");
 	
 	
 	public static JSONObject getData(String field) throws Exception {
@@ -43,7 +56,7 @@ public class DemoUtils {
 				throw new Exception("No Data Found");
 			
 			data = (JSONObject) parser.parse(response.getBody());
-//			System.out.println(data);
+			logger.info("Data from Server : " + data);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 //			throw new Exception(ex.getLocalizedMessage());
@@ -61,7 +74,7 @@ public class DemoUtils {
 				throw new Exception("No Data Found");
 			
 			data = (JSONObject) parser.parse(response.getBody());
-			System.out.println(data);
+			logger.info("Data from Server : " + data);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
